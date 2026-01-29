@@ -13,3 +13,8 @@ information generated there. Check out the documentation there for more info.
  
 View the instructions in [nodecg-smashcontrol](https://github.com/smashcontrol/nodecg-smashcontrol) to install that,
 then run `nodecg install smashcontrol/smashcontrol-simpletext` to get this bundle.
+
+### Folder name
+
+NodeCG expects the bundle folder name to match `smashcontrol-simpletext`. If you cloned or renamed the directory,
+ensure the folder is named `smashcontrol-simpletext` before starting NodeCG to avoid manifest errors.
