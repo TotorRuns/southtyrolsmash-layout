@@ -5,7 +5,7 @@
   "license": "GPL-3.0",
   "dependencies": {},
   "nodecg": {
-    "compatibleRange": "^1.0.0",
+    "compatibleRange": "^1.0.0 || ^2.0.0",
     "bundleDependencies": {},
     "graphics": [
       {
