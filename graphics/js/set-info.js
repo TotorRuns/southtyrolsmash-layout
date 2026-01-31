@@ -69,8 +69,9 @@ $(() => {
             setText(bracket, data.bracketlocation);
             setText(player1tag, data.player1tag);
             setText(player2tag, data.player2tag);
-            setText(player1team, data.player1team);
-            setText(player2team, data.player2team);
+            // Removed player1team and player2team as they are not in the replicant documentation
+            // setText(player1team, data.player1team);
+            // setText(player2team, data.player2team);
             
             // Character assets depend on the game being set
             if (data.game) {
