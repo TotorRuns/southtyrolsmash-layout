@@ -48,6 +48,7 @@ $(() => {
         // The main Replicant, contains info for tags, characters, bracket location, and game.
         const setData = nodecg.Replicant("playerDataArray", bundle);
         setData.on('change', (newVal) => {
+            console.log("playerDataArray changed:", JSON.stringify(newVal, null, 2));
             if (newVal) {
                 updateAllFields(newVal);
             }
