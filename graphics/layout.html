@@ -1,49 +1,58 @@
 <!doctype html>
 <html>
 <head>
-
     <meta charset="utf-8">
     <title>SouthTyrol Smash Bros Layout</title>
     <link rel="stylesheet" href="css/layout.css">
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
-
     <script src="js/set-info.js"></script>
-
 </head>
 <body>
     <div class="layout">
-        <div class="layout-bg"></div>
-
-        <header class="layout-header">
-            <div class="event-badge">SouthTyrol Smash Bros</div>
-            <div class="meta">
-                <span class="meta-label">Round</span>
-                <div class="meta-value info bracket-location"></div>
+        <header class="meta-bar">
+            <div class="meta-content">
+                <div class="tournament-logo">SouthTyrol Smash</div>
+                <div class="round-info info bracket-location"></div>
+                <div class="best-of-info info best-of"></div>
             </div>
-            <div class="meta-sub">South Tyrol • #SouthTyrolSmash</div>
         </header>
 
-        <main class="match">
-            <section class="player-card player1">
-                <div class="player-team info player1-team"></div>
-                <div class="player-name info player1-tag"></div>
-                <div class="player-character info player1-character"><img alt=""></div>
-            </section>
-
-            <div class="score-pill">
-                <div class="score info player1-score">0</div>
-                <div class="score-divider">:</div>
-                <div class="score info player2-score">0</div>
+        <main class="match-container">
+            <div class="player-card player1">
+                <div class="sponsor-tag info player1-team"></div>
+                <div class="player-name-container">
+                    <div class="player-name info player1-tag"></div>
+                </div>
+                <div class="character-info">
+                    <div class="info player1-character">
+                        <img src="" alt="">
+                    </div>
+                </div>
             </div>
 
-            <section class="player-card player2">
-                <div class="player-team info player2-team"></div>
-                <div class="player-name info player2-tag"></div>
-                <div class="player-character info player2-character"><img alt=""></div>
-            </section>
+            <div class="score-container">
+                <div class="score p1 info player1-score">0</div>
+                <div class="score-divider"></div>
+                <div class="score p2 info player2-score">0</div>
+            </div>
+
+            <div class="player-card player2">
+                <div class="sponsor-tag info player2-team"></div>
+                <div class="player-name-container">
+                    <div class="player-name info player2-tag"></div>
+                </div>
+                <div class="character-info">
+                    <div class="info player2-character">
+                        <img src="" alt="">
+                    </div>
+                </div>
+            </div>
         </main>
+        
+        <footer class="footer-bar">
+            <div class="hashtag">#SouthTyrolSmash</div>
+        </footer>
     </div>
 </body>
 </html>

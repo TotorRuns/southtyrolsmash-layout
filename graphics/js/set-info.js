@@ -4,8 +4,9 @@ $(() => {
     function loadSmashControl(){
         const bundle = 'nodecg-smashcontrol';
 
-        //Variables for each of the jQuery classes that will be modified.
+        // Variables for each of the jQuery classes that will be modified.
         var bracket = $('.bracket-location');
+        var bestOf = $('.best-of-info');
         var player1tag = $('.player1-tag');
         var p1score = $('.player1-score');
         var player2tag = $('.player2-tag');
@@ -15,61 +16,69 @@ $(() => {
         var player1team = $('.player1-team');
         var player2team = $('.player2-team');
 
-        function setTextOrHide($el, value){
-            if (value !== undefined && value !== null && value !== ''){
-                $el.text(value);
-                $el.removeClass('is-hidden');
-            } else {
-                $el.text('');
-                $el.addClass('is-hidden');
-            }
+        // This function now simply sets the text. The CSS handles hiding empty elements.
+        function setText(element, value) {
+            element.text(value || '');
         }
 
-        function setCharacter($el, character, game){
-            var image = $el.children('img');
-            if (character){
-                var linkToImage = "../../nodecg-smashcontrol/dashboard/images/" + game + "/";
-                image.attr("src", linkToImage + character + ".png");
-                $el.removeClass('is-hidden');
+        // This function now simply sets the image source. The CSS handles hiding empty images.
+        function setCharacter(element, character, game) {
+            var image = element.find('img');
+            if (character && game) {
+                // Assuming a standard path structure for smashcontrol character images
+                var imagePath = `../../nodecg-smashcontrol/dashboard/images/${game}/${character}.png`;
+                image.attr('src', imagePath);
             } else {
-                image.attr("src", "");
-                $el.addClass('is-hidden');
+                image.attr('src', ''); // Setting src to empty will be caught by the CSS to hide it
             }
         }
+        
+        // Replicant for player scores
+        const player1score = nodecg.Replicant("player1Score", bundle);
+        const player2score = nodecg.Replicant("player2Score", bundle);
 
-        //Because scores are in separate replicants, we'll need to wait for any updates, then update.
-        var player1score = nodecg.Replicant("player1Score", bundle);
-        var player2score = nodecg.Replicant("player2Score", bundle);
-        NodeCG.waitForReplicants(player1score, player2score).then(() => {
-            player1score.on('change', (newVal) => {
-                if (newVal !== undefined && newVal !== null){
-                    p1score.html(newVal);
-                }
-            });
-            player2score.on('change', (newVal) => {
-                if (newVal !== undefined && newVal !== null){
-                    p2score.html(newVal);
-                }
-            });
+        player1score.on('change', (newVal) => {
+            p1score.text(newVal !== null ? newVal : '0');
         });
 
-        //the main Replicant, contains info for tag, character, bracket position and game. If there's a change, update everything.
-        var setInfo = nodecg.Replicant("playerDataArray", bundle);
-        setInfo.on('change', (newVal, oldVal) => {
-            if (newVal){
-                updateFields(newVal);
+        player2score.on('change', (newVal) => {
+            p2score.text(newVal !== null ? newVal : '0');
+        });
+
+        // The main Replicant, contains info for tags, characters, bracket location, and game.
+        const setData = nodecg.Replicant("playerDataArray", bundle);
+        setData.on('change', (newVal) => {
+            if (newVal) {
+                updateAllFields(newVal);
             }
         });
 
-        function updateFields(setData){
-            //Updates everything (except score), directly modifies the HTML.
-            setTextOrHide(bracket, setData.bracketlocation);
-            setTextOrHide(player1tag, setData.player1tag);
-            setTextOrHide(player2tag, setData.player2tag);
-            setTextOrHide(player1team, setData.player1team);
-            setTextOrHide(player2team, setData.player2team);
-            setCharacter(p1ch, setData.player1character, setData.game);
-            setCharacter(p2ch, setData.player2character, setData.game);
+        // Separate replicant for 'best of' info
+        const bestOfReplicant = nodecg.Replicant("bestOf", bundle);
+        bestOfReplicant.on('change', (newVal) => {
+            if (newVal) {
+                setText(bestOf, `Best of ${newVal}`);
+            } else {
+                setText(bestOf, '');
+            }
+        });
+
+        function updateAllFields(data) {
+            // Update all visual elements with the new data.
+            setText(bracket, data.bracketlocation);
+            setText(player1tag, data.player1tag);
+            setText(player2tag, data.player2tag);
+            setText(player1team, data.player1team);
+            setText(player2team, data.player2team);
+            
+            // Character assets depend on the game being set
+            if (data.game) {
+                setCharacter(p1ch, data.player1character, data.game);
+                setCharacter(p2ch, data.player2character, data.game);
+            } else {
+                setCharacter(p1ch, null);
+                setCharacter(p2ch, null);
+            }
         }
     }
 });
