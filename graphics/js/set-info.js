@@ -13,8 +13,8 @@ $(() => {
         var p2score = $('.player2-score');
         var p1ch = $('.player1-character');
         var p2ch = $('.player2-character');
-        var player1team = $('.player1-team');
-        var player2team = $('.player2-team');
+        
+        let currentGame = ''; // Variable to store the currently selected game
 
         // This function now simply sets the text. The CSS handles hiding empty elements.
         function setText(element, value) {
@@ -25,7 +25,6 @@ $(() => {
         function setCharacter(element, character, game) {
             var image = element.find('img');
             if (character && game) {
-                // Assuming a standard path structure for smashcontrol character images
                 var imagePath = `../../nodecg-smashcontrol/dashboard/images/${game}/${character}.png`;
                 image.attr('src', imagePath);
             } else {
@@ -33,7 +32,13 @@ $(() => {
             }
         }
         
-        // Replicant for player scores
+        // Replicant for the currently selected game
+        const gameSelection = nodecg.Replicant('gameSelection', bundle);
+        gameSelection.on('change', (newVal) => {
+            currentGame = newVal;
+        });
+
+        // Replicants for player scores
         const player1score = nodecg.Replicant("player1Score", bundle);
         const player2score = nodecg.Replicant("player2Score", bundle);
 
@@ -45,10 +50,9 @@ $(() => {
             p2score.text(newVal !== null ? newVal : '0');
         });
 
-        // The main Replicant, contains info for tags, characters, bracket location, and game.
+        // The main Replicant for player data
         const setData = nodecg.Replicant("playerDataArray", bundle);
         setData.on('change', (newVal) => {
-            console.log("playerDataArray changed:", JSON.stringify(newVal, null, 2));
             if (newVal) {
                 updateAllFields(newVal);
             }
@@ -69,14 +73,12 @@ $(() => {
             setText(bracket, data.bracketlocation);
             setText(player1tag, data.player1tag);
             setText(player2tag, data.player2tag);
-            // Removed player1team and player2team as they are not in the replicant documentation
-            // setText(player1team, data.player1team);
-            // setText(player2team, data.player2team);
             
-            // Character assets depend on the game being set
-            if (data.game) {
-                setCharacter(p1ch, data.player1character, data.game);
-                setCharacter(p2ch, data.player2character, data.game);
+            // Use the 'currentGame' variable from the 'gameSelection' replicant
+            // to load character assets.
+            if (currentGame) {
+                setCharacter(p1ch, data.player1character, currentGame);
+                setCharacter(p2ch, data.player2character, currentGame);
             } else {
                 setCharacter(p1ch, null);
                 setCharacter(p2ch, null);
